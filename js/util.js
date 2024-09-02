@@ -58,19 +58,49 @@ export const util = (() => {
 
     const guest = () => {
         const name = (new URLSearchParams(window.location.search)).get('to');
-        const guest = document.getElementById('guest-name');
+        const title = (new URLSearchParams(window.location.search)).get('title');
+        const guestNames = document.querySelectorAll('.guest-name');
+        const guestTitles = document.querySelectorAll('.guest-title');
 
-        if (!name) {
-            guest.remove();
-            return;
+        if (title) {
+            guestTitles.forEach((guest, index) => {
+                guest.innerHTML=escapeHtml(title)+" "
+            })
         }
 
-        const div = document.createElement('div');
-        div.classList.add('m-2');
-        div.innerHTML = `<p class="mt-0 mb-1 mx-0 p-0">${guest.getAttribute('data-message')}</p><h2>${escapeHtml(name)}</h2>`;
+        if (!name) {
+            // guestNames.forEach((guest, index) => guest.remove());
+            guestNames.forEach((guest, index) => {
+                const div = document.createElement('div');
+                div.classList.add('m-2');
+                if (guest.getAttribute('data-message').length) {
+                    div.innerHTML = `<p class="mt-0 mb-1 mx-0 p-0">${guest.getAttribute('data-message')}</p><h2>Bapak/Ibu/Saudara/i</h2>`;
+                } else {
+                    div.innerHTML = `<h2>Bapak/Ibu/Saudara/i</h2>`;
+                }
+        
+                document.getElementById('form-name').value = name;
+                guest.appendChild(div)
+            });
+            return
+        }
 
-        document.getElementById('form-name').value = name;
-        guest.appendChild(div);
+        guestNames.forEach((guest, index) => {
+            const div = document.createElement('div');
+            div.classList.add('m-2');
+            if (guest.getAttribute('data-message').length) {
+                if (!title) {
+                    div.innerHTML = `<p class="mt-0 mb-1 mx-0 p-0">${guest.getAttribute('data-message')}</p><h2>${escapeHtml(name)}</h2>`;
+                } else {
+                    div.innerHTML = `<p class="mt-0 mb-1 mx-0 p-0">${guest.getAttribute('data-message')} ${escapeHtml(title)}</p><h2>${escapeHtml(name)}</h2>`;
+                }
+            } else {
+                div.innerHTML = `<h2>${escapeHtml(name)}</h2>`;
+            }
+    
+            document.getElementById('form-name').value = name;
+            guest.appendChild(div)
+        });
     };
 
     const modal = (img) => {
