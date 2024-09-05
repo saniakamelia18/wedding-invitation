@@ -16,6 +16,7 @@ export const progress = (() => {
 
         if (loaded === total) {
             util.guest();
+            util.sessionDate();
             util.opacity('loading', 0.025);
         }
     };

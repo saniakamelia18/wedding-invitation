@@ -60,11 +60,17 @@ export const util = (() => {
         const name = (new URLSearchParams(window.location.search)).get('to');
         const title = (new URLSearchParams(window.location.search)).get('title');
         const guestNames = document.querySelectorAll('.guest-name');
+        const guestNamesInline = document.querySelectorAll('.guest-name-inline');
         const guestTitles = document.querySelectorAll('.guest-title');
 
         if (title) {
             guestTitles.forEach((guest, index) => {
                 guest.innerHTML=escapeHtml(title)+" "
+            })
+        }
+        if (name) {
+            guestNamesInline.forEach((guest, index) => {
+                guest.innerHTML=escapeHtml(name)+" "
             })
         }
 
@@ -102,6 +108,26 @@ export const util = (() => {
             guest.appendChild(div)
         });
     };
+
+    const sessionDate = () => {
+        const session = (new URLSearchParams(window.location.search)).get('sesi');
+        const reseptionDates = document.querySelectorAll('.reseption-date');
+
+        if (session == 1) {
+            reseptionDates.forEach((reseption, index) => {
+                reseption.innerHTML=escapeHtml("09.00")+" "
+            })
+        } else if (session == 2) {
+            reseptionDates.forEach((reseption, index) => {
+                reseption.innerHTML=escapeHtml("11.00 - 12.30 WIB")+" "
+            })
+        } else {
+            reseptionDates.forEach((reseption, index) => {
+                reseption.innerHTML=escapeHtml("09.00")+" "
+            })
+        }
+
+    }
 
     const modal = (img) => {
         document.getElementById('show-modal-image').src = img.src;
@@ -272,5 +298,6 @@ export const util = (() => {
         extractUUIDs,
         countDownDate,
         disableButton,
+        sessionDate
     }
 })();
