@@ -126,7 +126,12 @@ export const comment = (() => {
             presence.disabled = true;
         }
 
-        const form = document.getElementById(`form-${id ? `inner-${id}` : 'comment'}`);
+        const invitedby = document.getElementById('form-invitedby');
+        invitedby.disabled = true;
+
+        // const form = document.getElementById(`form-${id ? `inner-${id}` : 'comment'}`);
+        // form.disabled = true;
+        const form = document.getElementById(`form-comment`);
         form.disabled = true;
 
         const cancel = document.querySelector(`[onclick="comment.cancel('${id}')"]`);
@@ -136,20 +141,29 @@ export const comment = (() => {
 
         const btn = util.disableButton(button);
 
-        const response = await request(HTTP_POST, '/api/comment')
-            .token(session.get('token'))
-            .body({
-                id: id,
-                name: name.value,
-                presence: presence ? presence.value === "1" : true,
-                comment: form.value
-            })
-            .then();
+        // const response = await request(HTTP_POST, '/api/comment')
+        //     .token(session.get('token'))
+        //     .body({
+        //         id: id,
+        //         name: name.value,
+        //         presence: presence ? presence.value === "1" : true,
+        //         comment: form.value
+        //     })
+        //     .then();
+        let formatedText;
+        if (presence.value == 1) {
+            formatedText = `Terimakasih%20atas%20undangannya%2C%20insyaallah%20saya%20${name.value}%20hadir%20pada%20acara%20tersebut.%0A%0A${encodeURI(form.value)}`
+        } else if (presence.value == 2) {
+            formatedText = `Terimakasih%20atas%20undangannya%2C%20mohon%20maaf%20saya%20${name.value}%20belum%20bisa%20hadir%20pada%20acara%20tersebut.%0A%0A${encodeURI(form.value)}`
+        }
+
+        window.open(`https://wa.me/${invitedby.value}?text=${formatedText}`)
 
         if (name) {
             name.disabled = false;
         }
 
+        invitedby.disabled = false;
         form.disabled = false;
         if (cancel) {
             cancel.disabled = false;
@@ -161,25 +175,25 @@ export const comment = (() => {
 
         btn.restore();
 
-        if (response?.code === 201) {
-            owns.set(response.data.uuid, response.data.own);
-            form.value = null;
+        // if (response?.code === 201) {
+        //     owns.set(response.data.uuid, response.data.own);
+        //     form.value = null;
 
-            if (presence) {
-                presence.value = "0";
-            }
+        //     if (presence) {
+        //         presence.value = "0";
+        //     }
 
-            if (!id) {
-                await pagination.reset();
-                document.getElementById('comments').scrollIntoView({ behavior: 'smooth' });
-            }
+        //     if (!id) {
+        //         await pagination.reset();
+        //         document.getElementById('comments').scrollIntoView({ behavior: 'smooth' });
+        //     }
 
-            if (id) {
-                showHide.set('hidden', showHide.get('hidden').concat([{ uuid: response.data.uuid, show: true }]));
-                showHide.set('show', showHide.get('show').concat([id]));
-                await comment();
-            }
-        }
+        //     if (id) {
+        //         showHide.set('hidden', showHide.get('hidden').concat([{ uuid: response.data.uuid, show: true }]));
+        //         showHide.set('show', showHide.get('show').concat([id]));
+        //         await comment();
+        //     }
+        // }
     };
 
     const cancel = (id) => {
