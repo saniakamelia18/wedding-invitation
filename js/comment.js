@@ -108,7 +108,7 @@ export const comment = (() => {
 
         const name = document.getElementById('form-name');
         if (name.value.length == 0) {
-            alert('Please fill name');
+            alert('Mohon isi nama');
             return;
         }
 
@@ -118,7 +118,7 @@ export const comment = (() => {
 
         const presence = document.getElementById('form-presence');
         if (!id && presence && presence.value == "0") {
-            alert('Please select presence');
+            alert('Mohon konfirmasi kehadiran');
             return;
         }
 
@@ -128,6 +128,15 @@ export const comment = (() => {
 
         const invitedby = document.getElementById('form-invitedby');
         invitedby.disabled = true;
+
+        const presenceQuantity = document.getElementById('form-quantity');
+        if (!presenceQuantity && presenceQuantity.value < 0) {
+            alert('Jumlah kehadiran tidak boleh dibawah 0')
+        }
+
+        if (presenceQuantity && presenceQuantity.value > 0) {
+            presenceQuantity.disabled = true;
+        }
 
         // const form = document.getElementById(`form-${id ? `inner-${id}` : 'comment'}`);
         // form.disabled = true;
@@ -152,9 +161,9 @@ export const comment = (() => {
         //     .then();
         let formatedText;
         if (presence.value == 1) {
-            formatedText = `Terimakasih%20atas%20undangannya%2C%20insyaallah%20saya%20${name.value}%20hadir%20pada%20acara%20tersebut.%0A%0A${encodeURI(form.value)}`
+            formatedText = `Terimakasih%20atas%20undangannya%2C%20insyaallah%20saya%20${name.value}%20hadir%20pada%20acara%20tersebut%20dengan%20jumlah%20kehadiran%20sebanyak%20${presenceQuantity.value}%20orang.${form.value ? '%0A%0A'+encodeURI(form.value) : ''}`
         } else if (presence.value == 2) {
-            formatedText = `Terimakasih%20atas%20undangannya%2C%20mohon%20maaf%20saya%20${name.value}%20belum%20bisa%20hadir%20pada%20acara%20tersebut.%0A%0A${encodeURI(form.value)}`
+            formatedText = `Terimakasih%20atas%20undangannya%2C%20mohon%20maaf%20saya%20${name.value}%20belum%20bisa%20hadir%20pada%20acara%20tersebut.${form.value ? '%0A%0A'+encodeURI(form.value) : ''}`
         }
 
         window.open(`https://wa.me/${invitedby.value}?text=${formatedText}`)
@@ -164,6 +173,7 @@ export const comment = (() => {
         }
 
         invitedby.disabled = false;
+        presenceQuantity.disabled = false;
         form.disabled = false;
         if (cancel) {
             cancel.disabled = false;
