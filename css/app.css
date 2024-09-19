@@ -15,13 +15,35 @@ body {
     font-family: 'Josefin Sans', sans-serif !important;
     padding: 0 !important;
 }
+/* body {
+    font-family: Montserrat, sans-serif !important;
+    padding: 0 !important;
+} */
+/* body {
+    font-family: "Open Sans", sans-serif !important;
+    padding: 0 !important;
+} */
+/* body {
+    font-family: Poppins, sans-serif !important;
+    padding: 0 !important;
+} */
 
-.font-esthetic {
+/* .font-esthetic {
     font-family: Sacramento, cursive !important;
+} */
+.font-esthetic {
+    font-family: "Great Vibes", cursive !important;
 }
 
-.font-arabic {
+/* .font-arabic {
     font-family: 'Noto Naskh Arabic', serif !important;
+} */
+/* .font-arabic {
+    font-family: Amiri, serif !important;
+} */
+.font-arabic {
+    font-family: Lateef, serif !important;
+    font-size: large;
 }
 
 .img-crop {
