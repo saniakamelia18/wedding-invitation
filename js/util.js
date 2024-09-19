@@ -115,7 +115,7 @@ export const util = (() => {
 
         if (session == 1) {
             reseptionDates.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml("09.00")+" "
+                reseption.innerHTML=escapeHtml("09.00 WIB")+" "
             })
         } else if (session == 2) {
             reseptionDates.forEach((reseption, index) => {
@@ -123,7 +123,7 @@ export const util = (() => {
             })
         } else {
             reseptionDates.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml("09.00")+" "
+                reseption.innerHTML=escapeHtml("09.00 WIB")+" "
             })
         }
 
