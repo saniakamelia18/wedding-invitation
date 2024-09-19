@@ -115,15 +115,35 @@ export const util = (() => {
 
         if (session == 1) {
             reseptionDates.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml("09.00 WIB")+" "
+                reseption.innerHTML=escapeHtml("09.00 WIB ")
             })
         } else if (session == 2) {
             reseptionDates.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml("11.00 - 12.30 WIB")+" "
+                reseption.innerHTML=escapeHtml("11.00 - 12.30 WIB ")
             })
         } else {
             reseptionDates.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml("09.00 WIB")+" "
+                reseption.innerHTML=escapeHtml("09.00 WIB ")
+            })
+        }
+
+    }
+
+    const model = () => {
+        const mod = (new URLSearchParams(window.location.search)).get('mod');
+        const customModel = document.querySelectorAll('.custom-model');
+
+        if (mod == 1) {
+            customModel.forEach((reseption, index) => {
+                reseption.innerHTML=escapeHtml(" anak ")
+            })
+        } else if (mod == 2) {
+            customModel.forEach((reseption, index) => {
+                reseption.innerHTML=escapeHtml(" ")
+            })
+        } else {
+            customModel.forEach((reseption, index) => {
+                reseption.innerHTML=escapeHtml(" anak ")
             })
         }
 
@@ -298,6 +318,7 @@ export const util = (() => {
         extractUUIDs,
         countDownDate,
         disableButton,
-        sessionDate
+        sessionDate,
+        model
     }
 })();
