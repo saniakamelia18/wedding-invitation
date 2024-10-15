@@ -115,15 +115,15 @@ export const util = (() => {
 
         if (session == 1) {
             reseptionDates.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml("09.00 WIB ")
+                reseption.innerHTML=escapeHtml("12.00 WIB - selesai ")
             })
         } else if (session == 2) {
             reseptionDates.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml("11.00 - 12.30 WIB ")
+                reseption.innerHTML=escapeHtml("12.00 WIB - selesai ")
             })
         } else {
             reseptionDates.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml("09.00 WIB ")
+                reseption.innerHTML=escapeHtml("12.00 WIB - selesai ")
             })
         }
 
@@ -135,15 +135,15 @@ export const util = (() => {
 
         if (mod == 1) {
             customModel.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml(" anak ")
+                reseption.innerHTML=escapeHtml(" ")
             })
         } else if (mod == 2) {
             customModel.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml(" ")
+                reseption.innerHTML=escapeHtml(" anak ")
             })
         } else {
             customModel.forEach((reseption, index) => {
-                reseption.innerHTML=escapeHtml(" anak ")
+                reseption.innerHTML=escapeHtml(" ")
             })
         }
 
