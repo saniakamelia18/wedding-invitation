@@ -55,10 +55,16 @@ export const card = (() => {
     };
 
     const renderLike = (comment) => {
+        // return `
+        // <button style="font-size: 0.8rem;" onclick="like.like(this)" data-uuid="${comment.uuid}" class="btn btn-sm btn-outline-${theme.isDarkMode('light', 'dark')} rounded-3 p-0">
+        //     <div class="d-flex justify-content-start align-items-center">
+        //         <p class="my-0 mx-1" data-count-like="${comment.like.love}">${comment.like.love}</p>
+        //         <i class="me-1 ${likes.has(comment.uuid) ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart'}"></i>
+        //     </div>
+        // </button>`;
         return `
         <button style="font-size: 0.8rem;" onclick="like.like(this)" data-uuid="${comment.uuid}" class="btn btn-sm btn-outline-${theme.isDarkMode('light', 'dark')} rounded-3 p-0">
             <div class="d-flex justify-content-start align-items-center">
-                <p class="my-0 mx-1" data-count-like="${comment.like.love}">${comment.like.love}</p>
                 <i class="me-1 ${likes.has(comment.uuid) ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart'}"></i>
             </div>
         </button>`;
@@ -86,14 +92,23 @@ export const card = (() => {
     };
 
     const renderButton = (comment) => {
+        // return `
+        // <div class="d-flex flex-wrap justify-content-between align-items-center" id="button-${comment.uuid}">
+        //     <div class="d-flex flex-wrap justify-content-start align-items-center">
+        //         ${renderAction(comment)}
+        //     </div>
+        //         ${comment.comments.length > 0 ?
+        //         `<a style="font-size: 0.8rem;" onclick="comment.showOrHide(this)" data-uuid="${comment.uuid}" data-uuids="${comment.comments.map((c) => c.uuid).join(',')}" data-show="${showHide.get('show').includes(comment.uuid) ? 'true' : 'false'}" role="button" class="me-auto ms-1 py-0">${showHide.get('show').includes(comment.uuid) ? 'Hide replies' : `Show replies (${comment.comments.length})`}</a>` :
+        //         ''}
+        //     <div class="ms-auto">
+        //         ${renderLike(comment)}
+        //     </div>
+        // </div>`;
         return `
         <div class="d-flex flex-wrap justify-content-between align-items-center" id="button-${comment.uuid}">
             <div class="d-flex flex-wrap justify-content-start align-items-center">
                 ${renderAction(comment)}
             </div>
-                ${comment.comments.length > 0 ?
-                `<a style="font-size: 0.8rem;" onclick="comment.showOrHide(this)" data-uuid="${comment.uuid}" data-uuids="${comment.comments.map((c) => c.uuid).join(',')}" data-show="${showHide.get('show').includes(comment.uuid) ? 'true' : 'false'}" role="button" class="me-auto ms-1 py-0">${showHide.get('show').includes(comment.uuid) ? 'Hide replies' : `Show replies (${comment.comments.length})`}</a>` :
-                ''}
             <div class="ms-auto">
                 ${renderLike(comment)}
             </div>
@@ -148,21 +163,27 @@ export const card = (() => {
     };
 
     const renderContent = (comment, is_parent) => {
+        // return `
+        // <div ${renderHeader(comment, is_parent)} id="${comment.uuid}">
+        //     <div id="body-content-${comment.uuid}" data-tapTime="0" data-liked="false" ontouchend="like.tapTap(this)">
+        //     ${renderBody(comment, is_parent)}
+        //     </div>
+        //     ${renderTracker(comment)}
+        //     ${renderButton(comment)}
+        //     ${comment.comments.map((c) => renderContent(c, false)).join('')}
+        // </div>`;
         return `
         <div ${renderHeader(comment, is_parent)} id="${comment.uuid}">
             <div id="body-content-${comment.uuid}" data-tapTime="0" data-liked="false" ontouchend="like.tapTap(this)">
             ${renderBody(comment, is_parent)}
             </div>
-            ${renderTracker(comment)}
-            ${renderButton(comment)}
-            ${comment.comments.map((c) => renderContent(c, false)).join('')}
         </div>`;
     };
 
     const fetchTracker = (comment) => {
-        comment.comments.forEach((c) => {
-            fetchTracker(c);
-        });
+        // comment.comments.forEach((c) => {
+        //     fetchTracker(c);
+        // });
 
         if (comment.ip === undefined || comment.user_agent === undefined || comment.is_admin || tracker.has(comment.ip)) {
             return;

@@ -132,15 +132,14 @@ export const comment = (() => {
         const presenceQuantity = document.getElementById('form-quantity');
         if (!presenceQuantity && presenceQuantity.value < 0) {
             alert('Jumlah kehadiran tidak boleh dibawah 0')
+            return
         }
 
         if (presenceQuantity && presenceQuantity.value > 0) {
             presenceQuantity.disabled = true;
         }
 
-        // const form = document.getElementById(`form-${id ? `inner-${id}` : 'comment'}`);
-        // form.disabled = true;
-        const form = document.getElementById(`form-comment`);
+        const form = document.getElementById(`form-${id ? `inner-${id}` : 'comment'}`);
         form.disabled = true;
 
         const cancel = document.querySelector(`[onclick="comment.cancel('${id}')"]`);
@@ -150,23 +149,32 @@ export const comment = (() => {
 
         const btn = util.disableButton(button);
 
-        // const response = await request(HTTP_POST, '/api/comment')
+        // const response = await request('POST', 'http://localhost:3000')
         //     .token(session.get('token'))
         //     .body({
         //         id: id,
         //         name: name.value,
         //         presence: presence ? presence.value === "1" : true,
+        //         num_presence: presenceQuantity.value,
         //         comment: form.value
         //     })
         //     .then();
-        let formatedText;
-        if (presence.value == 1) {
-            formatedText = `Terimakasih%20atas%20undangannya%2C%20insyaallah%20saya%20${name.value}%20hadir%20pada%20acara%20tersebut%20dengan%20jumlah%20kehadiran%20sebanyak%20${presenceQuantity.value}%20orang.${form.value ? '%0A%0A'+encodeURI(form.value) : ''}`
-        } else if (presence.value == 2) {
-            formatedText = `Terimakasih%20atas%20undangannya%2C%20mohon%20maaf%20saya%20${name.value}%20belum%20bisa%20hadir%20pada%20acara%20tersebut.${form.value ? '%0A%0A'+encodeURI(form.value) : ''}`
-        }
-
-        window.open(`https://wa.me/${invitedby.value}?text=${formatedText}`)
+        const response = await fetch('http://localhost:3000', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
+            },
+            body: JSON.stringify({
+                name: name.value,
+                presence: presence ? Number(presence.value === "1") : 1,
+                num_presence: presenceQuantity.value,
+                comment: form.value
+            })
+        })
+            .then(res => res.json());
 
         if (name) {
             name.disabled = false;
@@ -185,25 +193,25 @@ export const comment = (() => {
 
         btn.restore();
 
-        // if (response?.code === 201) {
-        //     owns.set(response.data.uuid, response.data.own);
-        //     form.value = null;
+        if (response?.code === 201) {
+            owns.set(response.uuid, response.own);
+            form.value = null;
 
-        //     if (presence) {
-        //         presence.value = "0";
-        //     }
+            if (presence) {
+                presence.value = "0";
+            }
 
-        //     if (!id) {
-        //         await pagination.reset();
-        //         document.getElementById('comments').scrollIntoView({ behavior: 'smooth' });
-        //     }
+            if (!id) {
+                await pagination.reset();
+                document.getElementById('comments').scrollIntoView({ behavior: 'smooth' });
+            }
 
-        //     if (id) {
-        //         showHide.set('hidden', showHide.get('hidden').concat([{ uuid: response.data.uuid, show: true }]));
-        //         showHide.set('show', showHide.get('show').concat([id]));
-        //         await comment();
-        //     }
-        // }
+            if (id) {
+                showHide.set('hidden', showHide.get('hidden').concat([{ uuid: response.uuid, show: true }]));
+                showHide.set('show', showHide.get('show').concat([id]));
+                await comment();
+            }
+        }
     };
 
     const cancel = (id) => {
@@ -276,35 +284,56 @@ export const comment = (() => {
     };
 
     const comment = async () => {
-        card.renderLoading();
+        // card.renderLoading();
         const comments = document.getElementById('comments');
         const onNullComment = `<div class="h6 text-center fw-bold p-4 my-3 bg-theme-${theme.isDarkMode('dark', 'light')} rounded-4 shadow">Yuk bagikan undangan ini biar banyak komentarnya</div>`;
 
-        await request(HTTP_GET, `/api/comment?per=${pagination.getPer()}&next=${pagination.getNext()}`)
-            .token(session.get('token'))
-            .then((res) => {
-                pagination.setResultData(res.data.length);
+        // await request(HTTP_GET, `/api/comment?per=${pagination.getPer()}&next=${pagination.getNext()}`)
+        //     .token(session.get('token'))
+        //     .then((res) => {
+        //         pagination.setResultData(res.data.length);
 
-                if (res.data.length === 0) {
+        //         if (res.data.length === 0) {
+        //             comments.innerHTML = onNullComment;
+        //             return;
+        //         }
+
+        //         showHide.set('hidden', (() => {
+        //             let arrHidden = showHide.get('hidden');
+        //             util.extractUUIDs(res.data).forEach((c) => {
+        //                 if (!arrHidden.find((item) => item.uuid === c)) {
+        //                     arrHidden.push({ uuid: c, show: false });
+        //                 }
+        //             });
+
+        //             return arrHidden;
+        //         })());
+
+        //         comments.setAttribute('data-loading', 'false');
+        //         comments.innerHTML = res.data.map((comment) => card.renderContent(comment)).join('');
+        //         res.data.forEach(card.fetchTracker);
+        //     });
+        
+        await fetch('http://localhost:3000', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
+            }
+        })
+            .then(res => res.json())
+            .then((res) => {
+                if (res.length === 0) {
                     comments.innerHTML = onNullComment;
                     return;
                 }
 
-                showHide.set('hidden', (() => {
-                    let arrHidden = showHide.get('hidden');
-                    util.extractUUIDs(res.data).forEach((c) => {
-                        if (!arrHidden.find((item) => item.uuid === c)) {
-                            arrHidden.push({ uuid: c, show: false });
-                        }
-                    });
-
-                    return arrHidden;
-                })());
-
                 comments.setAttribute('data-loading', 'false');
-                comments.innerHTML = res.data.map((comment) => card.renderContent(comment)).join('');
-                res.data.forEach(card.fetchTracker);
-            });
+                comments.innerHTML = res.map((comment) => card.renderContent(comment)).join('');
+                res.forEach(card.fetchTracker);
+            })
     };
 
     const showOrHide = (button) => {
