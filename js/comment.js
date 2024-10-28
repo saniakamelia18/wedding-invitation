@@ -313,8 +313,7 @@ export const comment = (() => {
         //         comments.innerHTML = res.data.map((comment) => card.renderContent(comment)).join('');
         //         res.data.forEach(card.fetchTracker);
         //     });
-        
-        await fetch('http://localhost:3000', {
+        await fetch(`http://localhost:3000?per=${pagination.getPer()}&next=${pagination.getNext()}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -325,15 +324,49 @@ export const comment = (() => {
         })
             .then(res => res.json())
             .then((res) => {
+                pagination.setResultData(res.length);
+
                 if (res.length === 0) {
                     comments.innerHTML = onNullComment;
                     return;
                 }
 
+                showHide.set('hidden', (() => {
+                    let arrHidden = showHide.get('hidden');
+                    util.extractUUIDs(res).forEach((c) => {
+                        if (!arrHidden.find((item) => item.uuid === c)) {
+                            arrHidden.push({ uuid: c, show: false });
+                        }
+                    });
+
+                    return arrHidden;
+                })());
+
                 comments.setAttribute('data-loading', 'false');
                 comments.innerHTML = res.map((comment) => card.renderContent(comment)).join('');
                 res.forEach(card.fetchTracker);
-            })
+            });
+        
+        // await fetch('http://localhost:3000', {
+        //     method: 'GET',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'Access-Control-Allow-Origin': '*',
+        //         'Access-Control-Allow-Credentials': 'true'
+        //     }
+        // })
+        //     .then(res => res.json())
+        //     .then((res) => {
+        //         if (res.length === 0) {
+        //             comments.innerHTML = onNullComment;
+        //             return;
+        //         }
+
+        //         comments.setAttribute('data-loading', 'false');
+        //         comments.innerHTML = res.map((comment) => card.renderContent(comment)).join('');
+        //         res.forEach(card.fetchTracker);
+        //     })
     };
 
     const showOrHide = (button) => {
