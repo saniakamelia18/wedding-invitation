@@ -149,7 +149,7 @@ export const comment = (() => {
 
         const btn = util.disableButton(button);
 
-        // const response = await request('POST', 'http://localhost:3000')
+        // const response = await request('POST', 'https://wedding-invitation-backend-smoky.vercel.app/')
         //     .token(session.get('token'))
         //     .body({
         //         id: id,
@@ -159,7 +159,7 @@ export const comment = (() => {
         //         comment: form.value
         //     })
         //     .then();
-        const response = await fetch('http://localhost:3000', {
+        const response = await fetch('https://wedding-invitation-backend-smoky.vercel.app/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -313,7 +313,7 @@ export const comment = (() => {
         //         comments.innerHTML = res.data.map((comment) => card.renderContent(comment)).join('');
         //         res.data.forEach(card.fetchTracker);
         //     });
-        await fetch(`http://localhost:3000?per=${pagination.getPer()}&next=${pagination.getNext()}`, {
+        await fetch(`https://wedding-invitation-backend-smoky.vercel.app/?per=${pagination.getPer()}&next=${pagination.getNext()}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -347,7 +347,7 @@ export const comment = (() => {
                 res.forEach(card.fetchTracker);
             });
         
-        // await fetch('http://localhost:3000', {
+        // await fetch('https://wedding-invitation-backend-smoky.vercel.app/', {
         //     method: 'GET',
         //     headers: {
         //         'Accept': 'application/json',
