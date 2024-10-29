@@ -74,9 +74,9 @@ export const card = (() => {
         const btn = theme.isDarkMode('light', 'dark');
         let action = '';
 
-        if (config.get('can_reply') == true || config.get('can_reply') === undefined) {
-            action += `<button style="font-size: 0.8rem;" onclick="comment.reply(this)" data-uuid="${comment.uuid}" class="btn btn-sm btn-outline-${btn} rounded-4 py-0 me-1">Reply</button>`;
-        }
+        // if (config.get('can_reply') == true || config.get('can_reply') === undefined) {
+        //     action += `<button style="font-size: 0.8rem;" onclick="comment.reply(this)" data-uuid="${comment.uuid}" class="btn btn-sm btn-outline-${btn} rounded-4 py-0 me-1">Reply</button>`;
+        // }
 
         if (owns.has(comment.uuid) && (config.get('can_edit') == true || config.get('can_edit') === undefined)) {
             action += `<button style="font-size: 0.8rem;" onclick="comment.edit(this)" data-uuid="${comment.uuid}" class="btn btn-sm btn-outline-${btn} rounded-4 py-0 me-1">Edit</button>`;
@@ -108,9 +108,6 @@ export const card = (() => {
         <div class="d-flex flex-wrap justify-content-between align-items-center" id="button-${comment.uuid}">
             <div class="d-flex flex-wrap justify-content-start align-items-center">
                 ${renderAction(comment)}
-            </div>
-            <div class="ms-auto">
-                ${renderLike(comment)}
             </div>
         </div>`;
     };
@@ -177,6 +174,7 @@ export const card = (() => {
             <div id="body-content-${comment.uuid}" data-tapTime="0" data-liked="false" ontouchend="like.tapTap(this)">
             ${renderBody(comment, is_parent)}
             </div>
+            ${renderButton(comment)}
         </div>`;
     };
 

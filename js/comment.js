@@ -69,6 +69,11 @@ export const comment = (() => {
             presence.disabled = true;
         }
 
+        const quantity = document.getElementById(`form-inner-quantity-${id}`);
+        if (quantity) {
+            quantity.disabled = true;
+        }
+
         const form = document.getElementById(`form-${id ? `inner-${id}` : 'comment'}`);
         form.disabled = true;
 
@@ -83,6 +88,7 @@ export const comment = (() => {
             .token(session.get('token'))
             .body({
                 presence: presence ? presence.value === "1" : null,
+                num_presence: quantity.value,
                 comment: form.value
             })
             .then((res) => res.data.status);
@@ -94,6 +100,10 @@ export const comment = (() => {
 
         if (presence) {
             presence.disabled = false;
+        }
+
+        if (quantity) {
+            quantity.disabled = false;
         }
 
         btn.restore();
@@ -149,32 +159,16 @@ export const comment = (() => {
 
         const btn = util.disableButton(button);
 
-        // const response = await request('POST', 'https://wedding-invitation-backend-smoky.vercel.app/')
-        //     .token(session.get('token'))
-        //     .body({
-        //         id: id,
-        //         name: name.value,
-        //         presence: presence ? presence.value === "1" : true,
-        //         num_presence: presenceQuantity.value,
-        //         comment: form.value
-        //     })
-        //     .then();
-        const response = await fetch('https://wedding-invitation-backend-smoky.vercel.app/', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Credentials': 'true'
-            },
-            body: JSON.stringify({
+        const response = await request(HTTP_POST, '/api/comment')
+            .token(session.get('token'))
+            .body({
+                id: id,
                 name: name.value,
-                presence: presence ? Number(presence.value === "1") : 1,
+                presence: presence ? presence.value === "1" : true,
                 num_presence: presenceQuantity.value,
                 comment: form.value
             })
-        })
-            .then(res => res.json());
+            .then();
 
         if (name) {
             name.disabled = false;
@@ -194,7 +188,7 @@ export const comment = (() => {
         btn.restore();
 
         if (response?.code === 201) {
-            owns.set(response.uuid, response.own);
+            owns.set(response.data.uuid, response.data.own);
             form.value = null;
 
             if (presence) {
@@ -207,7 +201,7 @@ export const comment = (() => {
             }
 
             if (id) {
-                showHide.set('hidden', showHide.get('hidden').concat([{ uuid: response.uuid, show: true }]));
+                showHide.set('hidden', showHide.get('hidden').concat([{ uuid: response.data.uuid, show: true }]));
                 showHide.set('show', showHide.get('show').concat([id]));
                 await comment();
             }
@@ -251,14 +245,14 @@ export const comment = (() => {
             return;
         }
 
-        changeButton(id, true);
+        changeButton(id, false);
         const tmp = button.innerText;
         button.innerText = 'Loading..';
 
         const status = await request(HTTP_GET, '/api/comment/' + id)
             .token(session.get('token'))
             .then((res) => res);
-
+        
         if (status?.code === 200) {
             const inner = document.createElement('div');
             inner.classList.add('my-2');
@@ -270,13 +264,15 @@ export const comment = (() => {
                 <option value="1" ${status.data.presence ? 'selected' : ''}>Datang</option>
                 <option value="2" ${status.data.presence ? '' : 'selected'}>Berhalangan</option>
             </select>` : ''}
-            <textarea class="form-control shadow-sm rounded-4 mb-2" id="form-inner-${id}" placeholder="Type update comment"></textarea>
+            <input type="number" class="form-control shadow-sm rounded-4 mb-2" id="form-inner-quantity-${id}" min="1" value="1" placeholder="Ubah jumlah kehadiran">
+            <textarea class="form-control shadow-sm rounded-4 mb-2" id="form-inner-${id}" placeholder="Ubah ucapan & doa"></textarea>
             <div class="d-flex flex-wrap justify-content-end align-items-center mb-0">
                 <button style="font-size: 0.8rem;" onclick="comment.cancel('${id}')" class="btn btn-sm btn-outline-${theme.isDarkMode('light', 'dark')} rounded-4 py-0 me-1">Cancel</button>
                 <button style="font-size: 0.8rem;" onclick="comment.update(this)" data-uuid="${id}" class="btn btn-sm btn-outline-${theme.isDarkMode('light', 'dark')} rounded-4 py-0">Update</button>
             </div>`;
 
             document.getElementById(`button-${id}`).insertAdjacentElement('afterend', inner);
+            document.getElementById(`form-inner-quantity-${id}`).value = status.data.num_presence;
             document.getElementById(`form-inner-${id}`).value = status.data.comment;
         }
 
@@ -284,56 +280,23 @@ export const comment = (() => {
     };
 
     const comment = async () => {
-        // card.renderLoading();
+        card.renderLoading();
         const comments = document.getElementById('comments');
         const onNullComment = `<div class="h6 text-center fw-bold p-4 my-3 bg-theme-${theme.isDarkMode('dark', 'light')} rounded-4 shadow">Yuk bagikan undangan ini biar banyak komentarnya</div>`;
 
-        // await request(HTTP_GET, `/api/comment?per=${pagination.getPer()}&next=${pagination.getNext()}`)
-        //     .token(session.get('token'))
-        //     .then((res) => {
-        //         pagination.setResultData(res.data.length);
-
-        //         if (res.data.length === 0) {
-        //             comments.innerHTML = onNullComment;
-        //             return;
-        //         }
-
-        //         showHide.set('hidden', (() => {
-        //             let arrHidden = showHide.get('hidden');
-        //             util.extractUUIDs(res.data).forEach((c) => {
-        //                 if (!arrHidden.find((item) => item.uuid === c)) {
-        //                     arrHidden.push({ uuid: c, show: false });
-        //                 }
-        //             });
-
-        //             return arrHidden;
-        //         })());
-
-        //         comments.setAttribute('data-loading', 'false');
-        //         comments.innerHTML = res.data.map((comment) => card.renderContent(comment)).join('');
-        //         res.data.forEach(card.fetchTracker);
-        //     });
-        await fetch(`https://wedding-invitation-backend-smoky.vercel.app/?per=${pagination.getPer()}&next=${pagination.getNext()}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Credentials': 'true'
-            }
-        })
-            .then(res => res.json())
+        await request(HTTP_GET, `/api/comment?per=${pagination.getPer()}&next=${pagination.getNext()}`)
+            .token(session.get('token'))
             .then((res) => {
-                pagination.setResultData(res.length);
+                pagination.setResultData(res.data.length);
 
-                if (res.length === 0) {
+                if (res.data.length === 0) {
                     comments.innerHTML = onNullComment;
                     return;
                 }
 
                 showHide.set('hidden', (() => {
                     let arrHidden = showHide.get('hidden');
-                    util.extractUUIDs(res).forEach((c) => {
+                    util.extractUUIDs(res.data).forEach((c) => {
                         if (!arrHidden.find((item) => item.uuid === c)) {
                             arrHidden.push({ uuid: c, show: false });
                         }
@@ -343,30 +306,9 @@ export const comment = (() => {
                 })());
 
                 comments.setAttribute('data-loading', 'false');
-                comments.innerHTML = res.map((comment) => card.renderContent(comment)).join('');
-                res.forEach(card.fetchTracker);
+                comments.innerHTML = res.data.map((comment) => card.renderContent(comment)).join('');
+                // res.data.forEach(card.fetchTracker);
             });
-        
-        // await fetch('https://wedding-invitation-backend-smoky.vercel.app/', {
-        //     method: 'GET',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'Access-Control-Allow-Origin': '*',
-        //         'Access-Control-Allow-Credentials': 'true'
-        //     }
-        // })
-        //     .then(res => res.json())
-        //     .then((res) => {
-        //         if (res.length === 0) {
-        //             comments.innerHTML = onNullComment;
-        //             return;
-        //         }
-
-        //         comments.setAttribute('data-loading', 'false');
-        //         comments.innerHTML = res.map((comment) => card.renderContent(comment)).join('');
-        //         res.forEach(card.fetchTracker);
-        //     })
     };
 
     const showOrHide = (button) => {
