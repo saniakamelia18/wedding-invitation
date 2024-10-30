@@ -11,7 +11,8 @@ export const request = (method, path) => {
         method: method,
         headers: new Headers({
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
         })
     };
 

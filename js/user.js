@@ -9,7 +9,6 @@ export const user = (() => {
 
     const getUserDetail = () => {
         request(HTTP_GET, '/api/user').token(token.get('token')).then((res) => {
-
             for (let [key, value] of Object.entries(res.data)) {
                 user.set(key, value);
             }
@@ -165,6 +164,8 @@ export const user = (() => {
             newest.value = null;
             button.disabled = true;
             alert('Success change password');
+        } else {
+            alert('Old password is wrong')
         }
     };
 

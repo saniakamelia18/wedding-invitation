@@ -13,9 +13,12 @@
     <meta name="theme-color" content="#111111">
     <meta name="color-scheme" content="dark">
     <link rel="canonical" href="https://ulems.my.id/">
-    <link rel="shortcut icon" type="image/x-icon" href="https://ulems.my.id/favicon.ico">
+    <!-- <link rel="shortcut icon" type="image/x-icon" href="https://ulems.my.id/favicon.ico">
     <link rel="apple-touch-icon" sizes="192x192" href="https://ulems.my.id/assets/images/icon-192x192.png">
-    <link rel="icon" type="image/x-icon" href="https://ulems.my.id/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://ulems.my.id/favicon.ico"> -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/icon-1.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/assets/images/icon-1.png">
+    <link rel="icon" type="image/x-icon" href="/assets/images/icon-1.png">
 
     <!-- Preconnect CDN -->
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
@@ -41,7 +44,7 @@
     <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 
-<body data-url="https://api.ulems.my.id/">
+<body data-url="https://wedding-invitation-backend-smoky.vercel.app">
 
     <!-- Nav bottom -->
     <nav class="navbar bg-light navbar-expand fixed-bottom rounded-top-4 border-top d-md-none d-lg-none d-xl-none m-0 p-0">
@@ -114,10 +117,10 @@
                         <div class="rounded-4 p-2 mb-4 shadow" style="background-color: var(--bs-gray-200)">
                             <div class="d-flex justify-content-between">
                                 <p class="fw-semibold m-1" style="color: var(--bs-gray-900);"><i class="fa-solid fa-home mx-2"></i>Home</p>
-                                <button class="btn btn-success rounded-3 btn-sm m-0 pb-0" onclick="user.download(this)">
+                                <!-- <button class="btn btn-success rounded-3 btn-sm m-0 pb-0" onclick="user.download(this)">
                                     <i class="fa-solid fa-download"></i>
                                     <span class="d-none d-sm-inline ms-1">Download</span>
-                                </button>
+                                </button> -->
                             </div>
                         </div>
 
@@ -214,14 +217,14 @@
                         </div>
 
                         <!-- Form -->
-                        <div class="bg-theme-light p-3 my-2 rounded-4 shadow">
+                        <!-- <div class="bg-theme-light p-3 my-2 rounded-4 shadow">
                             <label for="form-comment" class="form-label fw-bold"><i class="fa-solid fa-comment me-1"></i>Comment</label>
                             <textarea class="form-control shadow-sm mb-3 rounded-4" id="form-comment" name="form-comment" placeholder="Type to comment"></textarea>
 
                             <div class="d-flex justify-content-end mb-0">
                                 <button onclick="comment.send(this)" class="btn btn-primary btn-sm rounded-4" style="font-size: 0.8rem;"><i class="fa-solid fa-paper-plane me-1"></i>Send</button>
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- Comments -->
                         <div class="my-3 pt-3" id="comments" data-loading="false"></div>
@@ -341,7 +344,7 @@
                             </div>
                         </div>
 
-                        <div class="p-3 bg-theme-light mb-4 rounded-4 shadow">
+                        <div class="p-3 bg-theme-light mb-2 rounded-4 shadow">
                             <div class="row align-items-center justify-content-between">
                                 <div class="col-auto">
                                     <small>
@@ -351,6 +354,20 @@
                                 <div class="col-auto">
                                     <small>
                                         <i class="fa-brands fa-github me-1"></i><a target="_blank" href="https://github.com/dewanakl/undangan">dewanakl</a>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-theme-light mb-4 rounded-4 shadow">
+                            <div class="row align-items-center justify-content-between">
+                                <div class="col-auto">
+                                    <small>
+                                        Developed with<i class="fa-solid fa-heart mx-1 text-danger"></i>Sania Kamelia Hamdani
+                                    </small>
+                                </div>
+                                <div class="col-auto">
+                                    <small>
+                                        <i class="fa-brands fa-github me-1"></i><a target="_blank" href="https://github.com/saniakamelia18/wedding-invitation">saniakamelia18</a>
                                     </small>
                                 </div>
                             </div>
